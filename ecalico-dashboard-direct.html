@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>eCalico Business Analysis</title>
+    <script src="https://cdn.developer.sas.com/packages/sas-auth-browser/latest/dist/index.js"></script>
+    <!script src="http://dvr.na.sas.com/unicorn/artifacts/npm_deploy/@sas-internal/va-report-components/14.9.0-devel.40/package/dist/umd/va-report-components.js"></script--!>
+    <!script src="http://dvr.na.sas.com/unicorn/artifacts/npm_deploy/@sas-internal/va-report-components/14.12.0-devel.13/package/dist/umd/va-report-components.js"></script--!>
+    <script src="http://dvr.na.sas.com/unicorn/artifacts/npm_deploy/@sas-internal/va-report-components/15.1.0-devel.88/package/dist/umd/va-report-components.js"></script>
+
+    <style>
+      @import url("https://rsms.me/inter/inter.css");
+      html {
+        font-family: "Inter", sans-serif;
+      }
+      @supports (font-variation-settings: normal) {
+        html {
+          font-family: "Inter var", sans-serif;
+        }
+      }
+
+      html {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      body {
+        position: relative;
+        display: flex;
+        flex-grow: 1;
+        background-color: #f9fafb;
+        font-family: "Inter", sans-serif;
+      }
+
+      #logon-container h1, .text-container h1 {
+        font-size: 3em;
+        font-weight: 600;
+        margin-block-start: 0.5em;
+        margin-block-end: 0.5em;
+      }
+
+      .text-container h2 {
+        font-weight: 600;
+        font-size: 2em;
+        margin-block-start: 0.5em;
+        margin-block-end: 0.5em;
+      }
+
+      .href-container h3 {
+        font-weight: 600;
+        font-size: 1.5em;
+        margin-block-start: 0.5em;
+        margin-block-end: 0.5em;
+      }
+
+      .text-container p, .href-container p, #logon-container p {
+        font-weight: 300;
+        font-size: 1em;
+        line-height: 1;
+      }
+
+      .logo {
+        filter: brightness(0) invert(0%);
+      }
+
+      .drop-shadow {
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.04),
+          0px 8px 16px rgba(0, 0, 0, 0.08);
+      }
+
+      .page-container {
+        display: none;
+        flex-direction: column;
+        flex-grow: 1;
+        padding: 2rem;
+        margin: 2rem auto;
+      }
+
+      .wide {
+        max-width: 1200px;
+      }
+
+      .narrow {
+        max-width: 800px;
+      }
+
+      .padded-container {
+        padding: 6em;
+        background-color: #ffffff;
+        border-radius: 0 0 0.25em 0.25em;
+      }
+
+      .primary-button {
+        background-color: #0578ce;
+        color: #ffffff;
+        padding: 0.5em 1.5em;
+        margin-top: 1em;
+        cursor: pointer;
+        border-radius: 2px;
+        border: 0px;
+        font-family: Inter, sans-serif;
+        font-size: 1em;
+        line-height: 1;
+      }
+
+      .href-container {
+        padding: 2em 2em 0 2em;
+      }
+
+      .href-content {
+        background-color: #fff;
+        border-top: 2px solid #2096f3;
+        display: grid;
+        flex-grow: 1;
+        overflow: auto;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(1, 300px);
+        column-gap: 2rem;
+        padding: 1em;
+      }
+
+      .href-text {
+        margin: auto 0;
+      }
+
+      .href-image {
+        height: 100%;
+        margin: 0 auto;
+      }
+
+      .text-container {
+        margin-block-start: 3em;
+        padding: 2em;
+      }
+
+      .kv-grid-container, .viz-grid-container, .returns-monitor-container {
+        display: grid;
+        flex-grow: 1;
+        overflow: auto;
+        column-gap: 2rem;
+        row-gap: 2rem;
+        padding: 2em;
+      }
+
+      .kv-grid-container {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 200px);
+      }
+      .viz-grid-container {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, 400px);
+      }
+      .returns-monitor-container {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(6, 200px);
+      }
+
+      .dynamic-text-container {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        column-gap: 2rem;
+        margin: 0 2rem;
+        height: 200px;
+        box-sizing: border-box;
+      }
+
+      .dynamic-text {
+        margin: auto 0;
+        height: 3rem;
+      }
+
+      .keyvalue {
+        padding: 2em 0;
+        background-color: #ffffff;
+        border-top: 2px solid #2096f3;
+        border-radius: 0 0 0.25em 0.25em;
+      }
+
+      .visualization {
+        background-color: #ffffff;
+        padding: 2em;
+        border-radius: 0.25em;
+      }
+
+      #esri-map {
+        grid-area: 2 / 1 / 5 / 5;
+      }
+
+      #butterfly {
+        grid-area: 1 / 1 / 2 / 5;
+      }
+
+      #bar-chart {
+        grid-area: 2 / 1 / 3 / 3;
+      }
+
+      #line-chart {
+        grid-area: 2 / 3 / 3 / 5;
+      }
+
+      #pc-plot {
+        grid-area: 4 / 1 / 7 / 5;
+      }
+      #stacked-bar {
+        grid-area: 2 / 1 / 4 / 3;
+      }
+      #pie-chart {
+        grid-area: 2 / 3 / 4 / 5;
+      }
+    </style>
+  </head>
+
+  <body id="body">
+    <div id="content-container" class="page-container wide">
+      <div class="text-container">
+        <img
+          src="./sas.png"
+          alt="SAS Logo"
+          title="SAS Logo"
+          class="logo"
+        />
+        <h1>eCalico Business Analysis</h1>
+        <p>
+          eCalico has a long history of strong market performance. We know that
+          our success is driven by customer satisfaction so we are doubling-down
+          on our efforts to improve customer satisfaction. Product Returns is an
+          area we will focus on the remaining months this year as this is a
+          direct indication of Customer Satisfaction. Please review this
+          Business Analysis portal to better understand areas where your
+          division can have impact to improve Product Returns and overall
+          Customer Satisfaction.
+        </p>
+      </div>
+
+      <div class="keyvalue drop-shadow dynamic-text-container">
+        <sas-report-object
+          objectName="ve2442"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          class="dynamic-text"
+          objectName="ve2540"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+      </div>
+      <div class="kv-grid-container">
+        <sas-report-object
+          class="keyvalue drop-shadow"
+          objectName="ve2457"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          class="keyvalue drop-shadow"
+          objectName="ve3306"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          class="keyvalue drop-shadow"
+          objectName="ve802"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          class="keyvalue drop-shadow"
+          objectName="ve246"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          id="esri-map"
+          class="visualization drop-shadow"
+          objectName="ve24283"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+      </div>
+
+      <div class="href-container">
+        <div class="href-content">
+          <img
+            class="href-image"
+            src="https://img.freepik.com/free-vector/shoppers-walking-past-fashion-outlet-window-customers-wheeling-cart-with-bags-packages-flat-vector-illustration-consumerism-purchase-concept_74855-10153.jpg?w=2000"
+          />
+          <div class="href-text">
+            <h3>Customer Satisfaction Surveys</h3>
+            <p>
+              How do you build engaging customer satisfaction surveys that get
+              you quality feedback from your users?
+            </p>
+            <a href="https://userpilot.com/blog/customer-satisfaction-survey-saas/">
+              <button class="primary-button">Learn more</button>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-container">
+        <h2>Returns & Warehouse Capacity</h2>
+        <p>
+          Customers don't return products if they are satisfied. High levels of
+          returned products is an area impacting corporate revenue. Other
+          revenue concerns are due to high inventory levels in our warehouses,
+          as well as situations where returns are causing us to exceed warehouse
+          capacity at certain locations.
+        </p>
+      </div>
+
+      <div class="keyvalue drop-shadow dynamic-text-container">
+        <sas-report-object
+          objectName="ve222"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          class="dynamic-text"
+          objectName="ve1902"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+      </div>
+
+      <div class="viz-grid-container">
+        <sas-report-object
+          id="butterfly"
+          class="visualization drop-shadow"
+          objectName="ve161"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          id="bar-chart"
+          class="visualization drop-shadow"
+          objectName="ve147"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          id="line-chart"
+          class="visualization drop-shadow"
+          objectName="ve14098"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+      </div>
+
+      <div class="text-container">
+        <h2>Monitor Returns</h2>
+        <p>
+          What are the primary reasons that customers return products? How can
+          we address those issues?
+        </p>
+      </div>
+
+      <div class="href-container">
+        <div class="href-content">
+          <img
+            class="href-image"
+            src="https://thumbs.dreamstime.com/b/online-store-delivery-web-shop-retail-purchase-shiping-goods-market-purchasing-shopping-business-vector-internet-mobile-136501850.jpg"
+          />
+          <div class="href-text">
+            <h3>7 Tips for Successful Product Returns Management</h3>
+            <p>
+              First, the bad news: about 30% of all products ordered online are
+              returned. To eliminate returns, some e-commerce retailers consider
+              making the return process difficult for consumers.
+            </p>
+            <a href="https://www.thefulfillmentlab.com/blog/returns-management-tips">
+              <button class="primary-button"">Learn more</button>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="returns-monitor-container">
+        <sas-report-object
+          class="keyvalue drop-shadow"
+          objectName="ve5168"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          class="keyvalue drop-shadow"
+          objectName="ve5188"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          class="keyvalue drop-shadow"
+          objectName="ve5205"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          class="keyvalue drop-shadow"
+          objectName="ve5222"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          id="stacked-bar"
+          class="visualization drop-shadow"
+          objectName="ve208"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          id="pie-chart"
+          class="visualization drop-shadow"
+          objectName="ve494"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+        <sas-report-object
+          id="pc-plot"
+          class="visualization drop-shadow"
+          objectName="ve350"
+          authenticationType="credentials"
+          reportUri="/reports/reports/f0c93173-756f-48d0-8f89-715759928416"
+        ></sas-report-object>
+      </div>
+    </div>
+    <div id="logon-container" class="page-container narrow">
+      <div class="padded-container drop-shadow">
+        <img
+          src="./sas.png"
+          alt="SAS Logo"
+          title="SAS Logo"
+	        class="logo"
+         />
+        <h1>eCalico Business Analysis</h1>
+        <p>Please sign in to SAS to access this dashboard.</p>
+        <button id="logon-button" class="primary-button">Sign in</button>
+      </div>
+    </div>
+  </body>
+  <script>
+    (async () => {
+      const viyaUrl =
+				"https://vasdk.ingress-nginx.dvrsvcs-m1.dvr.sashq-d.openstack.sas.com/";
+			const instance = sasAuthBrowser.createCookieAuthenticationCredential({
+        url: viyaUrl,
+      });
+      const showContent = () => {
+        // Set all of the report object viya urls.
+        // We have to wait and do this AFTER authentication has completed to avoid all of the objects
+        // to continue to show their own individual logon button.
+        const sdkElements = document.getElementsByTagName("sas-report-object");
+        for (const element of sdkElements) {
+          element.url = viyaUrl;
+        }
+        // Hide the logon div and show the report element content.
+        const logonContainer = document.getElementById("logon-container");
+        const contentContainer = document.getElementById("content-container");
+        logonContainer.style.display = "none";
+        contentContainer.style.display = "flex";
+      };
+      const showLogon = () => {
+        // Hide the logon div and show the report element content.
+        const logonContainer = document.getElementById("logon-container");
+        logonContainer.style.display = "flex";
+      };
+      try {
+        await instance.checkAuthenticated();
+        showContent();
+      } catch {
+        showLogon();
+        const btn = document.getElementById("logon-button");
+        btn.onclick = async () => {
+          await instance.loginPopup();
+          showContent();
+        };
+      }
+    })();
+  </script>
+</html>

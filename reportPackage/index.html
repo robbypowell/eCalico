@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script async src='https://cdn.developer.sas.com/packages/va-report-components/latest/dist/umd/va-report-components.js'></script>
+    <!--
+    Uncomment the stylesheet link below to access the fonts in the SAS Viya deployment.
+       Risk: This change requires a live connection to SAS Viya.
+       Reward: This change enables access to the fonts that were used to design the report.
+    <link rel='stylesheet' type='text/css' href='css/viyafonts.css' />
+    -->
+    <style>
+      body {margin: 0px; padding: 0px;}
+      sas-report,
+      sas-report-page,
+      sas-report-object {width: 100vw; height: 100vh;}
+    </style>
+  </head>
+  <body>
+    <!-- MainContainer -->
+    <sas-report-object packageUri='.' objectName='ve452' ></sas-report-object>
+    <!-- Reason for Return -->
+    <sas-report-object packageUri='.' objectName='ve350' ></sas-report-object>
+    <!-- Key value - Customer Satisfaction 2 -->
+    <sas-report-object packageUri='.' objectName='ve5168' ></sas-report-object>
+    <!-- Key value - Survey Score 1 -->
+    <sas-report-object packageUri='.' objectName='ve5188' ></sas-report-object>
+    <!-- Key value - Online Reviews 1 -->
+    <sas-report-object packageUri='.' objectName='ve5205' ></sas-report-object>
+    <!-- Key value - Social Media Score 1 -->
+    <sas-report-object packageUri='.' objectName='ve5222' ></sas-report-object>
+    <!-- Bar - Reason for return 1 -->
+    <sas-report-object packageUri='.' objectName='ve208' ></sas-report-object>
+    <!-- Pie - Reason for return 1 -->
+    <sas-report-object packageUri='.' objectName='ve494' ></sas-report-object>
+  </body>
+</html>

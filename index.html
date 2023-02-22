@@ -5,16 +5,29 @@
   </head>
   <body>
     <h1>eCalico web app</h1>
-    <div style="width: 100%;">
-      <div style="width: 50%; height: 100px; float: left; background: green;"> 
+    <div style="width: 50%;">
+      <div style="width: 50%; height: 200px; float: left; background: rgb(85, 87, 85);"> 
+        This scenario is appropriate for use cases that require:
+        <ul> 
+          <li>access to the most up-to-date data</li>
+          <li>authenticate access to SAS Viya</li>
+          <li>access to analytics</li>
+        </ul>
         <button onclick="window.location.href='./ecalico-dashboard-direct.html';">
-          Authenticated to Viya    </button>
-          </div>
-      <div style="margin-left: 50%; height: 100px; background: blue;"> 
-        <button onclick="window.location.href='./ecalico-dashboard-publish.html';">
-          Disconnected from Viya
+          Authenticated    
         </button>
           </div>
+      <div style="margin-left: 50%; height: 200px; background: rgb(85, 87, 85);"> 
+        This scenario is appropriate for use cases that require:
+        <ul>
+          <li>delivery at scale on commodity infrastructure</li>
+          <li>no need to authenticate to SAS Viya</li>
+          <li>disconnected/offline access to report insights</li>
+        </ul>
+        <button onclick="window.location.href='./ecalico-dashboard-publish.html';">
+          Disconnected
+        </button>
+      </div>
   </div>
   </body>
 </html>
